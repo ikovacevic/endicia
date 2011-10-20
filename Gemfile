@@ -5,6 +5,7 @@ gem "activesupport", ">= 2.3.5"
 gem "i18n", ">= 0.6.0"
 gem "httparty", ">= 0.4.4"
 gem "builder", ">= 3.0.0"
+gem 'nokogiri'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

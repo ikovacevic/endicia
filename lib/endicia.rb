@@ -221,6 +221,8 @@ module Endicia
       :response_body => result.body
     }
 
+    doc = Nokogiri::XML(result.body)
+
     # TODO: It is possible to make a batch status request, currently this only
     #       supports one at a time. The response that comes back is not parsed
     #       well by HTTParty. So we have to assume there is only one tracking
@@ -228,9 +230,9 @@ module Endicia
     
     if result && result = result['StatusResponse']
       unless response[:error_message] = result['ErrorMsg']
-        result = result['StatusList']['PICNumber']
-        response[:status] = result.match(/<Status>(.+)<\/Status>/)[1]
-        status_code = result.match(/<StatusCode>(.+)<\/StatusCode>/)[1]
+        # HTTParty currently having issues parsing the single response.
+        status_code = (doc / 'StatusResponse' / 'StatusCode' ).text
+        response[:status] = (doc / 'StatusResponse' / 'Status' ).text
         response[:success] = (status_code.to_s != '-1')
       end
     end
