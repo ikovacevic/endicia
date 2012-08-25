@@ -10,6 +10,7 @@ module Endicia
                   :postage_balance, 
                   :pic,
                   :error_message,
+                  :requester_id,
                   :reference_id,
                   :cost_center,
                   :request_body,
@@ -19,7 +20,8 @@ module Endicia
       data = result["LabelRequestResponse"] || {}
       data.each do |k, v|
         k = "image" if k == 'Base64LabelImage'
-        send(:"#{k.tableize.singularize}=", v) if !k['xmlns']
+        label = "#{k.tableize.singularize}="
+        send(label.to_sym, v) if !k['xmlns'] && self.respond_to?(label)
       end
     end
     
